@@ -1,0 +1,79 @@
+﻿@using AntDesign;
+@page "/counter"
+
+<h1>Counter</h1>
+<Row>
+    <RowCol Sm="new EmbeddedProperty() { Span = 24 }" Md="new EmbeddedProperty() { Span = 24 }" Lg="new EmbeddedProperty() { Span = 14, Offset = 4 }">
+        <Card Title="Test">
+            <Body>
+                @for (int i = height; i > 0; i--)
+                {
+                    var p = i;
+                    var item = items.SingleOrDefault(x => (x.Row + x.Height - 1) == i);
+                    <Row>
+                        @if (item != null)
+                        {
+                            int start = item.Row;
+                            int end = item.Row + (item.Height - 1);
+                            if (item.Height > 1)
+                            {
+                                for (int x = 0; x < item.Height; x++)
+                                {
+                                    var t = x;
+                                    int row = i - x;
+                                    <RowCol Span="3" Style="display: flex; justify-content: center; align-items: center;">@(p - t)</RowCol>
+                                    <RowCol Span="18"><Button Style="width: 100%" Type="primary">@item.Name</Button></RowCol>
+                                    <RowCol Span="3" Style="display: flex; justify-content: center; align-items: center;">@row</RowCol>
+
+
+                                    Console.WriteLine($"Row {row.ToString("00")} - Item {item.Name} at {i} spans {item.Height} positions.");
+                                }
+                                i -= item.Height - 1;
+                            }
+                            else
+                            {
+                                <RowCol Span="3" Style="display: flex; justify-content: center; align-items: center;">@p</RowCol>
+                                <RowCol Span="18"><Button Style="width: 100%" Type="primary">@item.Name</Button></RowCol>
+                                <RowCol Span="3" Style="display: flex; justify-content: center; align-items: center;">@i</RowCol>
+                                Console.WriteLine($"Row {i.ToString("00")} - Item {item.Name} at {i} spans {item.Height} position.");
+                            }
+                        }
+                        else
+                        {
+                            <RowCol Span="3" Style="display: flex; justify-content: center; align-items: center;">@p</RowCol>
+                            <RowCol Span="18"><Button Style="width: 100%" Type="dashed">Add</Button></RowCol>
+                            <RowCol Span="3" Style="display: flex; justify-content: center; align-items: center;">@i</RowCol>
+                            Console.WriteLine($"Row {i.ToString("00")} - ");
+                        }
+
+                    </Row>
+
+                }
+            </Body>
+        </Card>
+    </RowCol>
+</Row>
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+
+    int height = 42;
+    List<Item> items = new List<Item>
+{
+            new Item(){ Name="Frank", Height = 1, Row = 1 },
+            new Item(){ Name="Jeff", Height = 3, Row = 2 },
+            new Item(){ Name="Abby", Height = 1, Row = 6 },
+            new Item(){ Name="Nicole", Height = 1, Row = 7 },
+        };
+
+    public class Item
+    {
+        public int Row { get; set; }
+        public int Height { get; set; }
+        public string Name { get; set; }
+    }
+}
